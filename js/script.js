@@ -19,6 +19,8 @@ window.onload = function () {
   document
     .getElementById("right")
     .addEventListener("click", () => handleMove(slideRight));
+
+  document.getElementById("new-game").addEventListener("click", resetGame);
 };
 
 function setGame() {
@@ -172,4 +174,25 @@ function disableControls() {
     btn.style.opacity = 0.5;
     btn.style.cursor = "not-allowed";
   });
+}
+
+function resetGame() {
+  localStorage.removeItem("board");
+  localStorage.removeItem("score");
+
+  // Reset game state
+  score = 0;
+  board = Array.from({ length: rows }, () => Array(columns).fill(0));
+  setTwo();
+  setTwo();
+
+  document.getElementById("game-over").style.display = "none";
+
+  document.querySelectorAll(".controls button").forEach((btn) => {
+    btn.disabled = false;
+    btn.style.opacity = 1;
+    btn.style.cursor = "pointer";
+  });
+
+  updateBoard();
 }
