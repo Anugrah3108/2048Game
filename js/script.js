@@ -22,7 +22,19 @@ window.onload = function () {
 };
 
 function setGame() {
-  board = Array.from({ length: rows }, () => Array(columns).fill(0));
+  // check localStorage
+  const savedBoard = localStorage.getItem("board");
+  const savedScore = localStorage.getItem("score");
+
+  if (savedBoard && savedScore) {
+    board = JSON.parse(savedBoard);
+    score = parseInt(savedScore, 10);
+  } else {
+    board = Array.from({ length: rows }, () => Array(columns).fill(0));
+    setTwo();
+    setTwo();
+    score = 0;
+  }
 
   const boardContainer = document.getElementById("board");
   boardContainer.innerHTML = "";
@@ -36,8 +48,6 @@ function setGame() {
     }
   }
 
-  setTwo();
-  setTwo();
   updateBoard();
 }
 
@@ -58,6 +68,10 @@ function updateBoard() {
     }
   }
   document.getElementById("score").innerText = score;
+
+  // Implementation of localStorage
+  localStorage.setItem("board", JSON.stringify(board));
+  localStorage.setItem("score", score);
 }
 
 function handleMove(moveFunc) {
@@ -69,6 +83,8 @@ function handleMove(moveFunc) {
     if (isGameOver()) {
       document.getElementById("game-over").style.display = "block";
       disableControls();
+      localStorage.removeItem("board");
+      localStorage.removeItem("score");
     }
   }
 }
